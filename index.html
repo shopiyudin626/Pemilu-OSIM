@@ -145,7 +145,7 @@
                 </div>
             </div>
 
-            <!-- CANDIDATES CARDS & REAL-TIME REKAP (AREA LINGKARAN 3) -->
+            <!-- CANDIDATES CARDS & REAL-TIME REKAP -->
             <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 md:p-8 shadow-2xl space-y-6">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 border-b border-slate-800 pb-4">
                     <div>
@@ -209,14 +209,14 @@
         <!-- ================= MODE 3: PENGATURAN & KELOLA DATA ================= -->
         <div id="view-settings" class="hidden max-w-3xl mx-auto space-y-6">
             
-            <!-- Pengaturan Nama & Foto Calon -->
+            <!-- Pengaturan Nama, Foto & Visi Calon -->
             <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-5">
                 <div class="border-b border-slate-800 pb-3">
                     <h2 class="text-lg font-bold text-white flex items-center gap-2">
                         <i data-lucide="users" class="w-5 h-5 text-emerald-400"></i>
-                        Kelola Data 5 Calon OSIM
+                        Kelola Data 5 Calon OSIM & Visi
                     </h2>
-                    <p class="text-xs text-slate-400">Ubah nama dan tautan (URL) foto profil ke-5 calon ketua OSIM.</p>
+                    <p class="text-xs text-slate-400">Ubah nama, URL foto Google Drive, serta visi & misi ke-5 calon.</p>
                 </div>
 
                 <form id="settings-candidates-form" onsubmit="saveCandidatesSettings(event)" class="space-y-4">
@@ -225,7 +225,7 @@
                     </div>
                     <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2">
                         <i data-lucide="save" class="w-4 h-4"></i>
-                        <span>Simpan Perubahan Calon</span>
+                        <span>Simpan Perubahan Calon & Visi</span>
                     </button>
                 </form>
             </div>
@@ -295,13 +295,13 @@ const firebaseConfig = {
             updateSyncStatus(false, "Gagal Koneksi Firebase");
         }
 
-        // Default Candidates Data
+        // Default Candidates Data (Dilengkapi link foto Google Drive Anda & Visi)
         let candidates = [
-            { id: 1, name: "Calon 1", photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80", score: 0 },
-            { id: 2, name: "Calon 2", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80", score: 0 },
-            { id: 3, name: "Calon 3", photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&auto=format&fit=crop&q=80", score: 0 },
-            { id: 4, name: "Calon 4", photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80", score: 0 },
-            { id: 5, name: "Calon 5", photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&auto=format&fit=crop&q=80", score: 0 }
+            { id: 1, name: "Calon 1", photo: "https://lh3.googleusercontent.com/d/1IK2yysj1WqBolvm5mnINNkC_A1cTtkso", vision: "Terwujudnya OSIM yang aktif, kreatif, dan berakhlak mulia.", score: 0 },
+            { id: 2, name: "Calon 2", photo: "https://lh3.googleusercontent.com/d/1eOhonIyZx4xiyN2Lp7IsEOKggyyZHzZT", vision: "Menjadikan siswa-siswi MTs disiplin dan berprestasi.", score: 0 },
+            { id: 3, name: "Calon 3", photo: "https://lh3.googleusercontent.com/d/1Jg2YhiCL7worPkeh5whEdb3dGGJqRgmw", vision: "Meningkatkan solidaritas dan kreativitas antar siswa.", score: 0 },
+            { id: 4, name: "Calon 4", photo: "https://lh3.googleusercontent.com/d/1sRTTc1KZs3IJlVyFMdxvVu2IL21ths82", vision: "OSIM sebagai wadah aspirasi yang solutif dan inovatif.", score: 0 },
+            { id: 5, name: "Calon 5", photo: "https://lh3.googleusercontent.com/d/1UOjpSdbi96llFw7xLWPancpqKIcnG22Q", vision: "Membangun lingkungan madrasah yang religius dan menyenangkan.", score: 0 }
         ];
 
         let totalBallots = 0;
@@ -315,7 +315,7 @@ const firebaseConfig = {
         }
 
         // ========================================================
-        // 2. NAVIGASI TAB (PROYEKTOR / HP OPERATOR / PENGATURAN)
+        // 2. NAVIGASI TAB
         // ========================================================
         function switchRole(role) {
             document.getElementById('view-projector').classList.add('hidden');
@@ -340,7 +340,6 @@ const firebaseConfig = {
             if (window.lucide) lucide.createIcons();
         }
 
-        // Status Sync UI Updater
         function updateSyncStatus(isOnline, text) {
             const badges = [document.getElementById('sync-status-badge'), document.getElementById('sync-status-badge-mobile')];
             badges.forEach(badge => {
@@ -390,9 +389,10 @@ const firebaseConfig = {
                         </div>
 
                         <span class="text-xs font-bold px-2.5 py-0.5 rounded-md bg-slate-800 text-emerald-400 font-mono mb-1">Calon #0${c.id}</span>
-                        <h4 class="font-bold text-white text-base truncate w-full mb-3">${c.name}</h4>
+                        <h4 class="font-bold text-white text-base truncate w-full mb-1">${c.name}</h4>
+                        <p class="text-[11px] text-slate-400 italic mb-3 line-clamp-2 px-1">"${c.vision || '-'}"</p>
 
-                        <div class="w-full bg-slate-900 rounded-xl p-3 border border-slate-800/80 space-y-2">
+                        <div class="w-full bg-slate-900 rounded-xl p-3 border border-slate-800/80 space-y-2 mt-auto">
                             <div class="flex justify-between items-baseline">
                                 <span class="text-xs text-slate-400 font-medium">Total Poin</span>
                                 <span class="text-xl font-black ${isLeader ? 'text-emerald-400' : 'text-white'}">
@@ -410,7 +410,6 @@ const firebaseConfig = {
             }).join('');
         }
 
-        // Render Operator Input Form
         function renderOperatorForm() {
             const container = document.getElementById('operator-input-list');
             if (!container) return;
@@ -441,33 +440,28 @@ const firebaseConfig = {
             }).join('');
         }
 
-        // Select Point Handler
         function selectPoint(candidateId, point) {
             currentOperatorSelections[candidateId] = point;
             document.getElementById('operator-error-alert').classList.add('hidden');
             renderOperatorForm();
         }
 
-        // Reset Operator Selections
         function resetOperatorForm() {
             currentOperatorSelections = { 1: null, 2: null, 3: null, 4: null, 5: null };
             document.getElementById('operator-error-alert').classList.add('hidden');
             renderOperatorForm();
         }
 
-        // Submit Ballot (Poin 1-5 validation)
         async function submitBallot() {
             const vals = Object.values(currentOperatorSelections);
             const alertBox = document.getElementById('operator-error-alert');
 
-            // Check if any null
             if (vals.some(v => v === null)) {
                 document.getElementById('operator-error-text').innerText = "Harap berikan poin (1-5) untuk SEMUA calon!";
                 alertBox.classList.remove('hidden');
                 return;
             }
 
-            // Check duplicates
             const uniqueVals = new Set(vals);
             if (uniqueVals.size !== 5) {
                 document.getElementById('operator-error-text').innerText = "Poin harus unik! Tidak boleh ada calon dengan poin yang sama.";
@@ -475,13 +469,11 @@ const firebaseConfig = {
                 return;
             }
 
-            // Update state
             candidates.forEach(c => {
                 c.score += currentOperatorSelections[c.id];
             });
             totalBallots += 1;
 
-            // Sync to Firebase if connected
             if (isFirebaseActive && db) {
                 try {
                     await db.collection('osim_election').doc('results').set({
@@ -502,7 +494,6 @@ const firebaseConfig = {
             alert("✅ Poin lembar suara berhasil dikirim!");
         }
 
-        // Firebase Realtime Listener
         function listenRealtimeData() {
             if (!isFirebaseActive || !db) return;
 
@@ -521,7 +512,6 @@ const firebaseConfig = {
             });
         }
 
-        // Settings Render & Action
         function renderSettingsForm() {
             const container = document.getElementById('settings-candidates-inputs');
             if (!container) return;
@@ -535,9 +525,13 @@ const firebaseConfig = {
                             <input type="text" id="set-name-${c.id}" value="${c.name}" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
                         </div>
                         <div>
-                            <label class="text-xs text-slate-400 block mb-1">URL Foto (Link Gambar)</label>
+                            <label class="text-xs text-slate-400 block mb-1">URL Foto (Google Drive Direct)</label>
                             <input type="text" id="set-photo-${c.id}" value="${c.photo}" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
                         </div>
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">Visi & Misi Singkat</label>
+                        <textarea id="set-vision-${c.id}" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">${c.vision || ''}</textarea>
                     </div>
                 </div>
             `).join('');
@@ -548,8 +542,10 @@ const firebaseConfig = {
             candidates.forEach(c => {
                 const nameInp = document.getElementById(`set-name-${c.id}`);
                 const photoInp = document.getElementById(`set-photo-${c.id}`);
+                const visionInp = document.getElementById(`set-vision-${c.id}`);
                 if (nameInp) c.name = nameInp.value;
                 if (photoInp) c.photo = photoInp.value;
+                if (visionInp) c.vision = visionInp.value;
             });
 
             if (isFirebaseActive && db) {
@@ -564,7 +560,7 @@ const firebaseConfig = {
 
             renderProjectorCards();
             renderOperatorForm();
-            alert(" Data calon berhasil diperbarui!");
+            alert("✅ Data calon & visi berhasil diperbarui!");
         }
 
         async function clearAllVotes() {
@@ -586,7 +582,7 @@ const firebaseConfig = {
 
             renderProjectorCards();
             renderOperatorForm();
-            alert(" Reset poin suara berhasil!");
+            alert("✅ Reset poin suara berhasil!");
         }
 
         function toggleScoreVisibility() {
@@ -603,9 +599,9 @@ const firebaseConfig = {
         }
 
         function exportToCSV() {
-            let csv = "Nomor Urut,Nama Calon,Total Poin\n";
+            let csv = "Nomor Urut,Nama Calon,Visi Misi,Total Poin\n";
             candidates.forEach(c => {
-                csv += `${c.id},"${c.name}",${c.score}\n`;
+                csv += `${c.id},"${c.name}","${c.vision || ''}",${c.score}\n`;
             });
             csv += `\nTotal Kertas Suara Masuk,${totalBallots}\n`;
 
@@ -617,7 +613,6 @@ const firebaseConfig = {
             a.click();
         }
 
-        // Initial Setup
         window.addEventListener('DOMContentLoaded', () => {
             renderProjectorCards();
             renderOperatorForm();
