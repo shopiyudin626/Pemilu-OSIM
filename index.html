@@ -384,9 +384,9 @@ const firebaseConfig = {
                     <div class="bg-slate-950 border ${isLeader ? 'border-emerald-500 ring-2 ring-emerald-500/30' : 'border-slate-800'} rounded-2xl p-4 flex flex-col items-center text-center relative overflow-hidden transition-all duration-300">
                         ${isLeader ? `<div class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-extrabold text-[10px] uppercase">Memimpin</div>` : ''}
                         
-                        <div class="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 ${isLeader ? 'border-emerald-400' : 'border-slate-700'} my-2 shadow-lg bg-slate-900 flex-shrink-0">
-                            <img src="${c.photo}" alt="${c.name}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'">
-                        </div>
+                        <div class="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 ${isLeader ? 'border-emerald-400' : 'border-slate-700'} my-2 shadow-lg bg-slate-900 flex-shrink-0">
+    <img src="${c.photo}" alt="${c.name}" class="w-full h-full object-cover [image-rendering:-webkit-optimize-contrast]" ...>
+</div>
 
                         <span class="text-xs font-bold px-2.5 py-0.5 rounded-md bg-slate-800 text-emerald-400 font-mono mb-1">Calon #0${c.id}</span>
                         <h4 class="font-bold text-white text-base w-full mb-2 leading-tight">${c.name}</h4>
