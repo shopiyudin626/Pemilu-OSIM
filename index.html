@@ -31,6 +31,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
+    <!-- html2pdf Library untuk Ekspor PDF Otomatis -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <style>
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
@@ -157,7 +160,7 @@
                     <p class="text-xs text-slate-400">Poin diperbarui otomatis saat HP Operator menginput lembar suara.</p>
                 </div>
 
-                <!-- 5 CANDIDATES CARDS GRID (DIOPTIMALKAN AGAR LEGA DI LAPTOP/PROYEKTOR) -->
+                <!-- 5 CANDIDATES CARDS GRID -->
                 <div id="projector-cards-container" class="grid grid-cols-1 md:grid-cols-5 gap-4">
                     <!-- Cards Dynamic Injection -->
                 </div>
@@ -237,13 +240,13 @@
                         <i data-lucide="database" class="w-5 h-5 text-amber-400"></i>
                         Manajemen Data Pemilihan
                     </h2>
-                    <p class="text-xs text-slate-400">Ekspor rekap data atau reset total poin pemilihan.</p>
+                    <p class="text-xs text-slate-400">Ekspor rekap data ke PDF atau reset total poin pemilihan.</p>
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-3">
-                    <button onclick="exportToCSV()" class="flex-1 py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-sm transition-colors flex items-center justify-center gap-2">
-                        <i data-lucide="download" class="w-4 h-4 text-emerald-400"></i>
-                        <span>Ekspor Hasil (CSV)</span>
+                    <button onclick="exportToPDF()" class="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 border border-emerald-500 text-white font-bold text-sm transition-colors flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/30">
+                        <i data-lucide="file-text" class="w-4 h-4"></i>
+                        <span>Ekspor Laporan (PDF)</span>
                     </button>
                     <button onclick="clearAllVotes()" class="flex-1 py-3 px-4 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 font-semibold text-sm transition-colors flex items-center justify-center gap-2">
                         <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -254,6 +257,45 @@
         </div>
 
     </main>
+
+    <!-- HIDDEN TEMPLATE UNTUK LAPORAN PDF -->
+    <div id="pdf-report-template" class="hidden bg-white text-slate-900 p-8 font-sans max-w-3xl mx-auto">
+        <div class="text-center border-b-2 border-slate-800 pb-4 mb-6">
+            <h1 class="text-2xl font-black uppercase tracking-wide">BERITA ACARA REKAPITULASI</h1>
+            <h2 class="text-lg font-bold text-emerald-700">PEMILIHAN KETUA OSIM MTs</h2>
+            <p class="text-xs text-slate-500 mt-1">Laporan Resmi Hasil Penghitungan Poin Pemilihan Suara</p>
+        </div>
+
+        <div class="mb-4 flex justify-between text-sm font-semibold border-b border-slate-300 pb-2">
+            <span>Total Kertas Suara Masuk: <strong id="pdf-total-ballots">0</strong></span>
+            <span>Tanggal Cetak: <span id="pdf-date-print"></span></span>
+        </div>
+
+        <table class="w-full border-collapse border border-slate-400 text-xs mb-8">
+            <thead>
+                <tr class="bg-slate-200 text-slate-800">
+                    <th class="border border-slate-400 p-2 text-center w-12">No</th>
+                    <th class="border border-slate-400 p-2 text-left">Nama Calon</th>
+                    <th class="border border-slate-400 p-2 text-left">Visi & Misi</th>
+                    <th class="border border-slate-400 p-2 text-center w-20">Total Poin</th>
+                </tr>
+            </thead>
+            <tbody id="pdf-table-body">
+                <!-- Data injected -->
+            </tbody>
+        </table>
+
+        <div class="grid grid-cols-2 gap-8 pt-6 text-center text-xs">
+            <div>
+                <p class="mb-16">Mengetahui,<br>Kepala Madrasah / Pembina OSIM</p>
+                <p class="font-bold underline">( ........................................ )</p>
+            </div>
+            <div>
+                <p class="mb-16">Sidareja, <span id="pdf-sign-date"></span><br>Ketua Panitia / Operator</p>
+                <p class="font-bold underline">( ........................................ )</p>
+            </div>
+        </div>
+    </div>
 
     <!-- FOOTER -->
     <footer class="bg-slate-900/50 border-t border-slate-800 py-3 px-4 text-center text-xs text-slate-500">
@@ -355,7 +397,7 @@ const firebaseConfig = {
         }
 
         // ========================================================
-        // 3. LOGIKA RENDER & REAL-TIME LISTENERS (VISI DITAMPILKAN PENUH)
+        // 3. LOGIKA RENDER & REAL-TIME LISTENERS
         // ========================================================
         function renderProjectorCards() {
             const container = document.getElementById('projector-cards-container');
@@ -391,7 +433,6 @@ const firebaseConfig = {
                         <span class="text-xs font-bold px-2.5 py-0.5 rounded-md bg-slate-800 text-emerald-400 font-mono mb-1">Calon #0${c.id}</span>
                         <h4 class="font-bold text-white text-base w-full mb-2 leading-tight">${c.name}</h4>
                         
-                        <!-- VISI & MISI DITAMPILKAN UTUH DI PROYEKTOR -->
                         <div class="w-full bg-slate-900/80 rounded-xl p-2.5 border border-slate-800 mb-3 text-left">
                             <p class="text-[11px] md:text-xs text-slate-300 italic leading-relaxed">"${c.vision || 'Belum ada visi'}"</p>
                         </div>
@@ -602,19 +643,37 @@ const firebaseConfig = {
             }
         }
 
-        function exportToCSV() {
-            let csv = "Nomor Urut,Nama Calon,Visi Misi,Total Poin\n";
-            candidates.forEach(c => {
-                csv += `${c.id},"${c.name}","${c.vision || ''}",${c.score}\n`;
-            });
-            csv += `\nTotal Kertas Suara Masuk,${totalBallots}\n`;
+        // FUNGSI EKSPOR LAPORAN KE PDF
+        function exportToPDF() {
+            const todayStr = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('pdf-total-ballots').innerText = totalBallots;
+            document.getElementById('pdf-date-print').innerText = todayStr;
+            document.getElementById('pdf-sign-date').innerText = todayStr;
 
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.setAttribute('href', url);
-            a.setAttribute('download', 'Hasil_Pemilihan_OSIM_MTs.csv');
-            a.click();
+            const tbody = document.getElementById('pdf-table-body');
+            tbody.innerHTML = candidates.map(c => `
+                <tr>
+                    <td class="border border-slate-400 p-2 text-center font-bold">0${c.id}</td>
+                    <td class="border border-slate-400 p-2 font-semibold">${c.name}</td>
+                    <td class="border border-slate-400 p-2 italic text-slate-700">${c.vision || '-'}</td>
+                    <td class="border border-slate-400 p-2 text-center font-black text-emerald-800 text-sm">${c.score}</td>
+                </tr>
+            `).join('');
+
+            const element = document.getElementById('pdf-report-template');
+            element.classList.remove('hidden');
+
+            const opt = {
+                margin:       10,
+                filename:     'Berita_Acara_Pemilihan_OSIM.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().from(element).set(opt).save().then(() => {
+                element.classList.add('hidden');
+            });
         }
 
         window.addEventListener('DOMContentLoaded', () => {
