@@ -88,7 +88,7 @@
                     <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
                     Menghubungkan...
                 </span>
-                <button onclick="toggleFullscreen()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors" title="Layar Penuh">
+                <button onclick="toggleFullscreen()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors" title="Layar Penuh (Fullscreen)">
                     <i data-lucide="maximize" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -96,7 +96,7 @@
     </header>
 
     <!-- MAIN CONTAINER -->
-    <main class="max-w-7xl mx-auto w-full p-4 md:p-6 flex-grow">
+    <main class="max-w-[95rem] mx-auto w-full p-4 md:p-6 flex-grow">
 
         <!-- ================= MODE 1: PROYEKTOR / LAPTOP ================= -->
         <div id="view-projector" class="space-y-6">
@@ -157,7 +157,7 @@
                     <p class="text-xs text-slate-400">Poin diperbarui otomatis saat HP Operator menginput lembar suara.</p>
                 </div>
 
-                <!-- 5 CANDIDATES CARDS GRID -->
+                <!-- 5 CANDIDATES CARDS GRID (DIOPTIMALKAN AGAR LEGA DI LAPTOP/PROYEKTOR) -->
                 <div id="projector-cards-container" class="grid grid-cols-1 md:grid-cols-5 gap-4">
                     <!-- Cards Dynamic Injection -->
                 </div>
@@ -297,11 +297,11 @@ const firebaseConfig = {
 
         // Default Candidates Data (Dilengkapi link foto Google Drive Anda & Visi)
         let candidates = [
-            { id: 1, name: "Calon 1", photo: "https://lh3.googleusercontent.com/d/1IK2yysj1WqBolvm5mnINNkC_A1cTtkso", vision: "Terwujudnya OSIM yang aktif, kreatif, dan berakhlak mulia.", score: 0 },
-            { id: 2, name: "Calon 2", photo: "https://lh3.googleusercontent.com/d/1eOhonIyZx4xiyN2Lp7IsEOKggyyZHzZT", vision: "Menjadikan siswa-siswi MTs disiplin dan berprestasi.", score: 0 },
-            { id: 3, name: "Calon 3", photo: "https://lh3.googleusercontent.com/d/1Jg2YhiCL7worPkeh5whEdb3dGGJqRgmw", vision: "Meningkatkan solidaritas dan kreativitas antar siswa.", score: 0 },
-            { id: 4, name: "Calon 4", photo: "https://lh3.googleusercontent.com/d/1sRTTc1KZs3IJlVyFMdxvVu2IL21ths82", vision: "OSIM sebagai wadah aspirasi yang solutif dan inovatif.", score: 0 },
-            { id: 5, name: "Calon 5", photo: "https://lh3.googleusercontent.com/d/1UOjpSdbi96llFw7xLWPancpqKIcnG22Q", vision: "Membangun lingkungan madrasah yang religius dan menyenangkan.", score: 0 }
+            { id: 1, name: "Fachri Arya Dinar", photo: "https://lh3.googleusercontent.com/d/1IK2yysj1WqBolvm5mnINNkC_A1cTtkso", vision: "Mewujudkan MTs yang aktif, kreatif, dan ahlak mulia dengan menjadikan OSIM sebagai wadah aspirasi siswa.", score: 0 },
+            { id: 2, name: "Alifa Raniya Farihah", photo: "https://lh3.googleusercontent.com/d/1eOhonIyZx4xiyN2Lp7IsEOKggyyZHzZT", vision: "Membuat ruang sekolah dimana siswa bangga dengan identitas, berprestasi, serta aktif berorganisasi.", score: 0 },
+            { id: 3, name: "Raditiya Damar Panuluh", photo: "https://lh3.googleusercontent.com/d/1Jg2YhiCL7worPkeh5whEdb3dGGJqRgmw", vision: "Mewujudkan pelajar yang JUJUR (Jujur, Unggul, Jelas, Upgrade) dan berakhlakul karimah.", score: 0 },
+            { id: 4, name: "Nanda Jibril Ibrahim A...", photo: "https://lh3.googleusercontent.com/d/1sRTTc1KZs3IJlVyFMdxvVu2IL21ths82", vision: "Membentuk pertemanan tanpa memandang perbedaan serta meningkatkan kreativitas madrasah.", score: 0 },
+            { id: 5, name: "Kyla Cordelia Inara", photo: "https://lh3.googleusercontent.com/d/1UOjpSdbi96llFw7xLWPancpqKIcnG22Q", vision: "Mewujudkan OSIM MTs Cahaya sebagai motor penggerak perubahan positif bagi seluruh siswa.", score: 0 }
         ];
 
         let totalBallots = 0;
@@ -355,7 +355,7 @@ const firebaseConfig = {
         }
 
         // ========================================================
-        // 3. LOGIKA RENDER & REAL-TIME LISTENERS
+        // 3. LOGIKA RENDER & REAL-TIME LISTENERS (VISI DITAMPILKAN PENUH)
         // ========================================================
         function renderProjectorCards() {
             const container = document.getElementById('projector-cards-container');
@@ -384,13 +384,17 @@ const firebaseConfig = {
                     <div class="bg-slate-950 border ${isLeader ? 'border-emerald-500 ring-2 ring-emerald-500/30' : 'border-slate-800'} rounded-2xl p-4 flex flex-col items-center text-center relative overflow-hidden transition-all duration-300">
                         ${isLeader ? `<div class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-extrabold text-[10px] uppercase">Memimpin</div>` : ''}
                         
-                        <div class="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 ${isLeader ? 'border-emerald-400' : 'border-slate-700'} my-2 shadow-lg bg-slate-900">
+                        <div class="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 ${isLeader ? 'border-emerald-400' : 'border-slate-700'} my-2 shadow-lg bg-slate-900 flex-shrink-0">
                             <img src="${c.photo}" alt="${c.name}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'">
                         </div>
 
                         <span class="text-xs font-bold px-2.5 py-0.5 rounded-md bg-slate-800 text-emerald-400 font-mono mb-1">Calon #0${c.id}</span>
-                        <h4 class="font-bold text-white text-base truncate w-full mb-1">${c.name}</h4>
-                        <p class="text-[11px] text-slate-400 italic mb-3 line-clamp-2 px-1">"${c.vision || '-'}"</p>
+                        <h4 class="font-bold text-white text-base w-full mb-2 leading-tight">${c.name}</h4>
+                        
+                        <!-- VISI & MISI DITAMPILKAN UTUH DI PROYEKTOR -->
+                        <div class="w-full bg-slate-900/80 rounded-xl p-2.5 border border-slate-800 mb-3 text-left">
+                            <p class="text-[11px] md:text-xs text-slate-300 italic leading-relaxed">"${c.vision || 'Belum ada visi'}"</p>
+                        </div>
 
                         <div class="w-full bg-slate-900 rounded-xl p-3 border border-slate-800/80 space-y-2 mt-auto">
                             <div class="flex justify-between items-baseline">
