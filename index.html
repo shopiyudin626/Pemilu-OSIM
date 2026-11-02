@@ -258,43 +258,45 @@
 
     </main>
 
-    <!-- HIDDEN TEMPLATE UNTUK LAPORAN PDF -->
-    <div id="pdf-report-template" class="hidden bg-white text-slate-900 p-8 font-sans max-w-3xl mx-auto">
-        <div class="text-center border-b-2 border-slate-800 pb-4 mb-6">
-            <h1 class="text-2xl font-black uppercase tracking-wide">BERITA ACARA REKAPITULASI</h1>
-            <h2 class="text-lg font-bold text-emerald-700">PEMILIHAN KETUA OSIM MTs</h2>
-            <p class="text-xs text-slate-500 mt-1">Laporan Resmi Hasil Penghitungan Poin Pemilihan Suara</p>
+    <!-- TEMPLATE LAPORAN PDF (Dibuat Visible namun diposisikan di luar layar agar siap dibaca html2pdf) -->
+    <div id="pdf-report-container" style="position: absolute; left: -9999px; top: 0; width: 800px; background: #ffffff; color: #000000; padding: 30px; font-family: Arial, sans-serif;">
+        <div style="text-align: center; border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px;">
+            <h1 style="font-size: 20px; font-weight: bold; text-transform: uppercase; margin: 0;">BERITA ACARA REKAPITULASI</h1>
+            <h2 style="font-size: 16px; font-weight: bold; color: #059669; margin: 5px 0 0 0;">PEMILIHAN KETUA OSIM MTs</h2>
+            <p style="font-size: 11px; color: #666; margin: 5px 0 0 0;">Laporan Resmi Hasil Penghitungan Poin Pemilihan Suara</p>
         </div>
 
-        <div class="mb-4 flex justify-between text-sm font-semibold border-b border-slate-300 pb-2">
+        <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 8px;">
             <span>Total Kertas Suara Masuk: <strong id="pdf-total-ballots">0</strong></span>
             <span>Tanggal Cetak: <span id="pdf-date-print"></span></span>
         </div>
 
-        <table class="w-full border-collapse border border-slate-400 text-xs mb-8">
+        <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 30px;">
             <thead>
-                <tr class="bg-slate-200 text-slate-800">
-                    <th class="border border-slate-400 p-2 text-center w-12">No</th>
-                    <th class="border border-slate-400 p-2 text-left">Nama Calon</th>
-                    <th class="border border-slate-400 p-2 text-left">Visi & Misi</th>
-                    <th class="border border-slate-400 p-2 text-center w-20">Total Poin</th>
+                <tr style="background-color: #f1f5f9; color: #1e293b;">
+                    <th style="border: 1px solid #94a3b8; padding: 8px; text-align: center; width: 40px;">No</th>
+                    <th style="border: 1px solid #94a3b8; padding: 8px; text-align: left; width: 160px;">Nama Calon</th>
+                    <th style="border: 1px solid #94a3b8; padding: 8px; text-align: left;">Visi & Misi</th>
+                    <th style="border: 1px solid #94a3b8; padding: 8px; text-align: center; width: 60px;">Poin</th>
                 </tr>
             </thead>
             <tbody id="pdf-table-body">
-                <!-- Data injected -->
+                <!-- Data injected dynamically -->
             </tbody>
         </table>
 
-        <div class="grid grid-cols-2 gap-8 pt-6 text-center text-xs">
-            <div>
-                <p class="mb-16">Mengetahui,<br>Kepala Madrasah / Pembina OSIM</p>
-                <p class="font-bold underline">( ........................................ )</p>
-            </div>
-            <div>
-                <p class="mb-16">Sidareja, <span id="pdf-sign-date"></span><br>Ketua Panitia / Operator</p>
-                <p class="font-bold underline">( ........................................ )</p>
-            </div>
-        </div>
+        <table style="width: 100%; border: none; font-size: 11px; text-align: center; margin-top: 20px;">
+            <tr>
+                <td style="width: 50%; vertical-align: top;">
+                    <p style="margin: 0 0 60px 0;">Mengetahui,<br>Kepala Madrasah / Pembina OSIM</p>
+                    <p style="font-weight: bold; text-decoration: underline; margin: 0;">( ........................................ )</p>
+                </td>
+                <td style="width: 50%; vertical-align: top;">
+                    <p style="margin: 0 0 60px 0;">Sidareja, <span id="pdf-sign-date"></span><br>Ketua Panitia / Operator</p>
+                    <p style="font-weight: bold; text-decoration: underline; margin: 0;">( ........................................ )</p>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <!-- FOOTER -->
@@ -426,7 +428,7 @@ const firebaseConfig = {
                     <div class="bg-slate-950 border ${isLeader ? 'border-emerald-500 ring-2 ring-emerald-500/30' : 'border-slate-800'} rounded-2xl p-4 flex flex-col items-center text-center relative overflow-hidden transition-all duration-300">
                         ${isLeader ? `<div class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-extrabold text-[10px] uppercase">Memimpin</div>` : ''}
                         
-                        <div class="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 ${isLeader ? 'border-emerald-400' : 'border-slate-700'} my-2 shadow-lg bg-slate-900 flex-shrink-0">
+                       <div class="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 ${isLeader ? 'border-emerald-400' : 'border-slate-700'} my-2 shadow-lg bg-slate-900 flex-shrink-0">
     <img src="${c.photo}" alt="${c.name}" class="w-full h-full object-cover [image-rendering:-webkit-optimize-contrast]" ...>
 </div>
 
@@ -653,15 +655,14 @@ const firebaseConfig = {
             const tbody = document.getElementById('pdf-table-body');
             tbody.innerHTML = candidates.map(c => `
                 <tr>
-                    <td class="border border-slate-400 p-2 text-center font-bold">0${c.id}</td>
-                    <td class="border border-slate-400 p-2 font-semibold">${c.name}</td>
-                    <td class="border border-slate-400 p-2 italic text-slate-700">${c.vision || '-'}</td>
-                    <td class="border border-slate-400 p-2 text-center font-black text-emerald-800 text-sm">${c.score}</td>
+                    <td style="border: 1px solid #94a3b8; padding: 8px; text-align: center; font-weight: bold;">0${c.id}</td>
+                    <td style="border: 1px solid #94a3b8; padding: 8px; font-weight: bold;">${c.name}</td>
+                    <td style="border: 1px solid #94a3b8; padding: 8px; font-style: italic; color: #334155;">${c.vision || '-'}</td>
+                    <td style="border: 1px solid #94a3b8; padding: 8px; text-align: center; font-weight: 900; color: #059669; font-size: 13px;">${c.score}</td>
                 </tr>
             `).join('');
 
-            const element = document.getElementById('pdf-report-template');
-            element.classList.remove('hidden');
+            const element = document.getElementById('pdf-report-container');
 
             const opt = {
                 margin:       10,
@@ -671,9 +672,7 @@ const firebaseConfig = {
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            html2pdf().from(element).set(opt).save().then(() => {
-                element.classList.add('hidden');
-            });
+            html2pdf().from(element).set(opt).save();
         }
 
         window.addEventListener('DOMContentLoaded', () => {
