@@ -310,14 +310,17 @@
         // ========================================================
         // 1. KONFIGURASI FIREBASE (GANTI DENGAN MILIK ANDA)
         // ========================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSy...",
-            authDomain: "osim-mts-xxx.firebaseapp.com",
-            projectId: "osim-mts-xxx",
-            storageBucket: "osim-mts-xxx.appspot.com",
-            messagingSenderId: "1234567890",
-            appId: "1:1234567890:web:abc123def456"
-        };
+          // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyABbw8AY_cd5y19BpIjoBjbSGpCLgw00BM",
+  authDomain: "osimn-7155b.firebaseapp.com",
+  projectId: "osimn-7155b",
+  storageBucket: "osimn-7155b.firebasestorage.app",
+  messagingSenderId: "1025085131489",
+  appId: "1:1025085131489:web:925700a313167df3e485a0",
+  measurementId: "G-NJVE81083N"
+};
+
 
         // Initialize Firebase
         let db = null;
@@ -426,7 +429,7 @@
                     <div class="bg-slate-950 border ${isLeader ? 'border-emerald-500 ring-2 ring-emerald-500/30' : 'border-slate-800'} rounded-2xl p-4 flex flex-col items-center text-center relative overflow-hidden transition-all duration-300">
                         ${isLeader ? `<div class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-extrabold text-[10px] uppercase">Memimpin</div>` : ''}
                         
-                        <div class="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 ${isLeader ? 'border-emerald-400' : 'border-slate-700'} my-2 shadow-lg bg-slate-900 flex-shrink-0">
+                        <div class="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 ${isLeader ? 'border-emerald-400' : 'border-slate-700'} my-2 shadow-lg bg-slate-900 flex-shrink-0">
                             <img src="${c.photo}" alt="${c.name}" class="w-full h-full object-cover [image-rendering:-webkit-optimize-contrast]" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'">
                         </div>
 
